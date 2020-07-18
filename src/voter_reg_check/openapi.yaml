@@ -88,21 +88,12 @@ components:
         - zip_5
         - dob
       example:
-        first_name: "Reece"
-        last_name: "Hart"
-        street_address: "1 Sussex St."
+        first_name: "Joe"
+        last_name: "Biden"
+        street_address: "1600 Pennsylvania Ave. NW"
         apartment: ""
-        city: "San Francisco"
-        state_abbrev: "CA"
-        zip_5: "94131"
-        dob: "11/22/1968"
-        
-#        first_name: "Joe"
-#        last_name: "Biden"
-#        street_address: "1600 Pennsylvania Ave. NW"
-#        apartment: ""
-#        city: "Washington"
-#        state_abbrev: "DC"
-#        zip_5: "20500"
-#        dob: "11/20/1942"
+        city: "Washington"
+        state_abbrev: "DC"
+        zip_5: "20500"
+        dob: "11/20/1942"
         
