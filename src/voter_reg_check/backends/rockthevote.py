@@ -1,4 +1,4 @@
-"""use Vote America to check voter registration"""
+"""use Rock the Vote to check voter registration"""
 
 import logging
 
