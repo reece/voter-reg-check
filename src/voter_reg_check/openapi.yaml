@@ -29,7 +29,7 @@ paths:
               properties:
                 method:
                   type: string
-                  enum: ["rockthevote", "voteorg"]
+                  enum: ["rockthevote", "voteamerica", "voteorg"]
                   description: >-
                     Keyword to select which backend service to use for
                     registration check
