@@ -26,8 +26,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/VoterInfo"
-
+              properties:
+                method:
+                  type: string
+                  enum: ["rockthevote", "voteamerica"]
+                voter_info:
+                  $ref: "#/components/schemas/VoterInfo"
+  
       responses:
         "200":
           description: >-
@@ -36,10 +41,17 @@ paths:
               schema:
                 type: object
                 properties:
+                  timestamp:
+                    type: string
+                    example: "2020-07-18T17:04:23.337332+00:00"
+                  method:
+                    type: string
+                    example: "rockthevote"
                   result:
                     type: boolean
+                    example: true
                   voter_info:
-                    type: object
+                    $ref: "#/components/schemas/VoterInfo"
 
 components:
   schemas:
@@ -57,7 +69,7 @@ components:
           default: ""
         city:
           type: string
-        state:
+        state_abbrev:
           type: string
         zip_5:
           type: string
@@ -69,17 +81,25 @@ components:
         - street_address
         - apartment
         - city
-        - state
+        - state_abbrev
         - zip_5
         - dob
       example:
-        first_name: "Joe"
-        last_name: "Biden"
-        street_address: "1600 Pennsylvania Ave. NW"
+        first_name: "Reece"
+        last_name: "Hart"
+        street_address: "1 Sussex St."
         apartment: ""
-        city: "Washington"
-        state: "DC"
-        zip_5: "20500"
-        dob: "11/20/1942"
+        city: "San Francisco"
+        state_abbrev: "CA"
+        zip_5: "94131"
+        dob: "11/22/1968"
         
+#        first_name: "Joe"
+#        last_name: "Biden"
+#        street_address: "1600 Pennsylvania Ave. NW"
+#        apartment: ""
+#        city: "Washington"
+#        state_abbrev: "DC"
+#        zip_5: "20500"
+#        dob: "11/20/1942"
         

@@ -1,17 +1,22 @@
 """use Vote America to check voter registration"""
 
+import logging
+
 import dateutil.parser
 import requests
 
-from _lut import us_state_abbrev
+
+_logger = logging.getLogger(__name__)
 
 
 submit_url = "https://am-i-registered-to-vote.org/verify-registration.php"
 default_email_address = "bogus@bogus.com"
 
 
-def check(first_name, last_name, street_address, apartment, city, state, zip_5, dob, email=None):
+def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
     
+    _logger.info("check(...)")
+
     dob_dt = dateutil.parser.parse(dob)
 
     data = {
@@ -33,7 +38,7 @@ def check(first_name, last_name, street_address, apartment, city, state, zip_5, 
         "cons_city": city,
         "cons_first_name": first_name,
         "cons_last_name": last_name, 
-        "cons_state": us_state_abbrev[state],
+        "cons_state": state_abbrev,
         "cons_street1": street_address,
         "cons_street2": "",
         "cons_zip_code": zip_5,
@@ -42,7 +47,6 @@ def check(first_name, last_name, street_address, apartment, city, state, zip_5, 
     data.update(user_data)
     resp = requests.post(submit_url, data=data)
     resp.raise_for_status()
-    import IPython; IPython.embed()	  ### TODO: Remove IPython.embed()
     return "you are registered" in resp.content.decode()
 
 
@@ -50,7 +54,7 @@ if __name__ == "__main__":
     test_results = [
         ({"first_name": "Reece", "last_name": "Hart", "dob": "11/22/1968",
           "street_address": "1 Sussex St.", "apartment": "",
-          "city": "San Francisco", "state": "California",
+          "city": "San Francisco", "state_abbrev": "CA",
           "zip_5": "94131"}, True)
         ]
 
