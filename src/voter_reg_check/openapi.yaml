@@ -19,8 +19,8 @@ paths:
   /regcheck/:
     post:
       summary: Check voter registration status
-      operationId: voter_reg_check.routes.regcheck.post
       description: Checks voter registration status
+      operationId: voter_reg_check.routes.regcheck.post
       requestBody:
         required: True
         content:
@@ -30,6 +30,9 @@ paths:
                 method:
                   type: string
                   enum: ["rockthevote", "voteamerica"]
+                  description: >-
+                    Keyword to select which backend service to use for
+                    registration check
                 voter_info:
                   $ref: "#/components/schemas/VoterInfo"
   

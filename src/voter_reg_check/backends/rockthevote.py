@@ -15,8 +15,6 @@ default_email_address = "bogus@bogus.com"
 
 def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
     
-    _logger.info("check(...)")
-
     dob_dt = dateutil.parser.parse(dob)
 
     data = {
@@ -45,21 +43,7 @@ def check(first_name, last_name, street_address, apartment, city, state_abbrev, 
     }
 
     data.update(user_data)
+    _logger.info(f"checking {user_data}")
     resp = requests.post(submit_url, data=data)
     resp.raise_for_status()
     return "you are registered" in resp.content.decode()
-
-
-if __name__ == "__main__":
-    test_results = [
-        ({"first_name": "Reece", "last_name": "Hart", "dob": "11/22/1968",
-          "street_address": "1 Sussex St.", "apartment": "",
-          "city": "San Francisco", "state_abbrev": "CA",
-          "zip_5": "94131"}, True)
-        ]
-
-    for test, exp in test_results:
-        obs = check(**test)
-        r = "✔" if exp == obs else "✘"
-        print(f"{r} ({exp}) | {test}")
-
