@@ -20,7 +20,7 @@ paths:
     post:
       summary: Check voter registration status
       operationId: voter_reg_check.routes.regcheck.post
-      description: Checks voter registration status against Vote America
+      description: Checks voter registration status
       requestBody:
         required: True
         content:
