@@ -1,5 +1,24 @@
 #!/usr/bin/env python
 
+"""Compare voter registration check backends using valid and invalid
+data to assess sensitivity to inaccuracies.
+
+Currently prints something like this:
+
+mod                                 rockthevote    voteamerica    voteorg
+----------------------------------  -------------  -------------  ---------
+{}                                  True           True           True
+{'first_name': 'Bob'}               True           False          False
+{'last_name': 'Smith'}              True           False          False
+{'dob': '11/22/1967'}               True           False          True
+{'street_address': '1 Surrey St.'}  True           False          False
+{'city': 'San Diego'}               True           True           True
+{'state_abbrev': 'CO'}              False          False          True
+{'zip_5': '94122'}                  True           False          True
+
+"""
+
+
 import asyncio
 import copy
 import itertools
@@ -36,19 +55,36 @@ mods = [
 ]
 
 
-async def test1vi(voter_info, mod):
-    test_vi = copy.copy(voter_info)
-    test_vi.update(mod)
-    return [mod] + await asyncio.gather(*[check(m, test_vi) for m in methods])
+if True:
 
-async def build_results():
-    results = await asyncio.gather(*[test1vi(voter_info, mod) for mod in mods])
-    return results
+    # With too many mods, RTV gives
+    # 504 Server Error: Gateway Timeout for url: https://am-i-registered-to-vote.org/verify-registration.php
+    # It seems to be able to handle 3 concurrent requests
+    mods = mods[:3]
+
+    async def test1vi(voter_info, mod):
+        test_vi = copy.copy(voter_info)
+        test_vi.update(mod)
+        return [mod] + await asyncio.gather(*[check(m, test_vi) for m in methods])
+
+    async def build_results():
+        results = await asyncio.gather(*[test1vi(voter_info, mod) for mod in mods])
+        return results
+
+    results = asyncio.run(build_results())
+
+else:
+
+    def test1vi(voter_info, mod):
+        test_vi = copy.copy(voter_info)
+        test_vi.update(mod)
+        return [mod] + [check(m, test_vi) for m in methods]
+
+    def build_results():
+        results = [test1vi(voter_info, mod) for mod in mods]
+        return results
+
+    results = build_results()
 
 
-
-
-results = asyncio.run(build_results())
-
-print(tabulate.tabulate(results,
-                        headers=["mod"] + methods))
+print(tabulate.tabulate(results, headers=["mod"] + methods))
