@@ -3,7 +3,7 @@
 import logging
 
 import dateutil.parser
-import requests
+import requests_async as requests
 
 
 _logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ submit_url = "https://am-i-registered-to-vote.org/verify-registration.php"
 default_email_address = "bogus@bogus.com"
 
 
-def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
+async def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
     
     dob_dt = dateutil.parser.parse(dob)
 
@@ -44,6 +44,6 @@ def check(first_name, last_name, street_address, apartment, city, state_abbrev, 
 
     data.update(user_data)
     _logger.info(f"checking {user_data}")
-    resp = requests.post(submit_url, data=data)
+    resp = await requests.post(submit_url, data=data)
     resp.raise_for_status()
     return "you are registered" in resp.content.decode()

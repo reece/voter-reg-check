@@ -2,11 +2,13 @@
 
 import logging
 
+from contextlib import asynccontextmanager
 import bs4
 import dateutil.parser
-import requests
+import requests_async as requests
 
-from ._lut import abbrev_us_state
+
+from voter_reg_check.backends._lut import abbrev_us_state
 
 
 _logger = logging.getLogger(__name__)
@@ -14,10 +16,11 @@ _logger = logging.getLogger(__name__)
 
 url = "https://verify.vote.org"
 
-def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
+async def check(first_name, last_name, street_address, apartment, city, state_abbrev, zip_5, dob, email=None):
     
-    page = requests.get(url)
-    soup = bs4.BeautifulSoup(page.content, 'html.parser')
+    resp = await requests.get(url)
+    content = resp.content
+    soup = bs4.BeautifulSoup(content, 'html.parser')
     form = soup.find("form")
     inputs = form.findAll("input")
     submit_url = url + form.get("action")
@@ -44,6 +47,12 @@ def check(first_name, last_name, street_address, apartment, city, state_abbrev, 
 
     data.update(user_data)
     _logger.info(f"checking {user_data}")
-    resp = requests.post(submit_url, data=data)
+    resp = await requests.post(submit_url, data=data)
     resp.raise_for_status()
     return "is registered" in resp.content.decode()
+
+
+if __name__ == "__main__":
+    r = check(**{'first_name': 'Joe', 'last_name': 'Biden', 'dob': '11/20/1942',
+                     'street_address': '1600 Pennsylvania Ave. NW.', 'city': 'Washington', 'state_abbrev': 'DC',
+                     'zip_5': '20500', 'apartment': None})
