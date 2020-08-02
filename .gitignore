@@ -91,18 +91,13 @@ ENV/
 # PyCharm
 .idea
 
-*~
 *.bak
 *.orig
-doc/_build
+*~
 .eggs
-archive
-misc/docker
 .pytest_cache
-
-doc/changelog/*/.tags
-doc/changelog/*/.tags.mk
-doc/changelog/*/hg-git-remap.pl
 .vscode
-web_*
-refget-compliance-suite/
+archive
+private
+data
+dumps
