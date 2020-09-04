@@ -26,3 +26,6 @@ A docker image is available.  Invoke like this:
       --name voter-reg-check \
       --detach --rm -p 5000:5000 \
       reece/voter-reg-check
+
+Then navigate to http://localhost:5000/ and follow the OpenAPI
+documentation.
